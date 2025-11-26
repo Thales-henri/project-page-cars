@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-Br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <title>cadastrar carro</title>
+</head>
+<body>
+      <section class="cadastro">
+    <div class="login">
+      <h1>Cadastrar carro</h1>
+      <div>
+        <input type="text" id="marca" placeholder="Digite o marca">
+      </div>
+      <div>
+        <input type="text" id="modelo" placeholder="Digite o Modelo">
+      </div>
+      <div>
+        <input type="text" id="ano" placeholder="Digite o ano do carro">
+      </div>
+      <div>
+        <input type="text" id="preco" placeholder="Digite o preço">
+      </div>
+      <div>
+        <input type="text" id="km" placeholder="Digite a quantidade de km rodado">
+      </div>
+      <div>
+        <input type="file" id="image" accept="image/*" class="file-input" enctype="multipart/form-data">
+      </div>
+      <div class="buttons">
+      <button  class="Cadastrar" onclick="cadastro()">CADASTRAR</button>
+      <button class="Cadastrar" onclick="voltar()">VOLTAR</button>
+      </div>
+    </div>
+  </section>
+</body>
+
+<script>
+
+  function voltar(){
+    window.history.back()
+  }
+    async function cadastro() {
+  const carro = {
+    marca: document.getElementById("marca").value,
+    modelo: document.getElementById("modelo").value,
+    ano: document.getElementById("ano").value,
+    preco: document.getElementById("preco").value,
+    km: document.getElementById("km").value,
+  };
+
+  const resposta = await fetch("http://localhost:3004/carros/cadastrar", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(carro),
+  });
+
+  const data = await resposta.json();
+
+  if (!resposta.ok) {
+    alert("Erro ao cadastrar carro: " + (data.erro || "Verifique os dados."));
+    console.error("Erro no cadastro dos dados:", data);
+    return;
+  }
+
+  const carroId = data.id;
+  console.log("ID DO CARRO CRIADO:", carroId);
+
+
+  const imagem = document.getElementById("image").files[0];
+
+  if (!imagem) {
+    alert("Carro cadastrado, mas nenhuma imagem selecionada.");
+    window.location.href = "/carros.html";
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("imagem", imagem);
+
+  const respostaUpload = await fetch(
+    `http://localhost:3004/carros/uploadcarro/${carroId}`,
+    { method: "POST", body: formData }
+  );
+
+  const dataUpload = await respostaUpload.json();
+  console.log("RESPOSTA:", dataUpload);
+
+  if (respostaUpload.ok) {
+    alert("Carro e imagem cadastrados com sucesso!");
+    window.location.href = "carros.html";
+    
+  } else {
+    alert("Erro no upload da imagem: " + (dataUpload.erro || "Tente novamente."));
+  }
+}
+
+    
+</script>
+
+<script src=./api/src/auth.js></script>
+</html>

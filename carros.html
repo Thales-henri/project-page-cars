@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>carros</title>
+    <link rel="stylesheet" href="style_carros.css">
+<body>
+</head>
+<body>
+  <header>
+    <img id="img" src="/img/Digitalmarketcars.png">
+    <nav>
+      <ul>
+        <a href="/Home.html"><li>Home</li></a>
+        <a href="/carros.html"><li>Carros</li></a>
+        <a href="/login.html"  id="link-auth"><li id="texto-auth">login</li></a>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="conteudo">
+    <a href="cadastro_carros.html">
+      <button id="cadastro_carro">Cadastrar carro</button>
+    </a>
+
+    <div id="container-cards" class="carro"></div>
+  </main>
+
+  <script>
+
+    async function reservar(id_carro) {
+      const id_usuario = JSON.parse(localStorage.getItem("usuario"));
+      
+
+  const reserva = {
+    id_usuario: usuario.id,
+    id_carro: id_carro
+  };
+
+  const response = await fetch("http://localhost:3004/usuarios/reservar", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(reserva)
+  });
+  const nome = localStorage.getItem("nome")
+  localStorage.setItem("nome", usuario.nome);
+  const data = await response.json();
+  alert(`${data.mensagem} - Reservado por: ${nome}`);
+}
+    
+
+    async function deletar_carro(id) {
+      const confirmar = confirm("Tem certeza que quer deletar esse carro?");
+      if (!confirmar) return;
+
+      try {
+        const resposta = await fetch(`http://localhost:3004/carros/deletar/${id}`, {
+          method: 'DELETE',
+          }
+        );
+
+    
+        if (resposta.status === 204 || resposta.status === 200) {
+         
+          await carregarCards();
+          alert('Carro deletado com sucesso.');
+          return;
+        }
+
+     
+        const dados = await resposta.json().catch(() => null);
+
+        if (!resposta.ok) {
+          const msg = (dados && dados.message) ? dados.message : 'Erro ao deletar o carro.';
+          alert(msg);
+          return;
+        }
+
+        alert(dados && dados.message ? dados.message : 'Carro deletado com sucesso.');
+        await carregarCards();
+
+      } catch (erro) {
+        console.error('Erro ao deletar:', erro);
+        alert('Erro ao deletar o carro. Veja o console para mais detalhes.');
+      }
+    }
+     const api = 'http://localhost:3004/carros/listar';
+
+async function carregarCards() {
+  try {
+    const resposta = await fetch(api);
+    console.log("buscando dados da api...");
+
+    if (!resposta.ok) {
+      throw new Error('Erro ao buscar dados da API');
+    }
+
+    const dados = await resposta.json();
+    const container = document.getElementById('container-cards');
+    container.innerHTML = ''; 
+
+    if (Array.isArray(dados) && dados.length > 0) {
+      dados.forEach(item => {
+        const card = document.createElement('div');
+        card.classList.add('carros');
+
+          const urlimagem = `http://localhost:3004/image//${item.imagem}`
+          const img = document.createElement("img");
+          img.src = urlimagem
+          img.classList.add('imagemCarro')
+          card.appendChild(img);
+        
+                
+        
+        const titulo = document.createElement('h2');
+        titulo.textContent = item.marca;
+        card.appendChild(titulo);
+
+        
+        const modelo = document.createElement('p');
+        modelo.textContent = `Modelo: ${item.modelo}`;
+        card.appendChild(modelo);
+
+        container.appendChild(card);
+
+        const button = document.createElement('button')
+        button.textContent = 'Reservar'
+        button.classList.add('reserva')
+        button.onclick = () => {reservar(item.id)};
+        card.appendChild(button)
+        
+        
+
+        const preco = document.createElement('p')
+        preco.textContent = `preço: ${item.preco}`
+        card.appendChild(preco);
+
+        const ano = document.createElement('p')
+        ano.textContent = `${item.ano}`
+        card.appendChild(ano);
+
+        
+        const km = document.createElement('p')
+        const kmTexto = (item.km === 0 || item.km === '0') ? 'novo' : (item.km ?? '-');
+        km.textContent = `km: ${kmTexto}`;
+        card.appendChild(km);
+        
+        if (usuario.tipo == "admin") { 
+          const botaoDeletar = document.createElement('button');
+          botaoDeletar.textContent = 'Deletar';
+          botaoDeletar.classList.add('deletar');
+          botaoDeletar.onclick = () => deletar_carro(item.id);
+          card.appendChild(botaoDeletar);
+
+          const botaoEditar = document.createElement("button");
+          botaoEditar.textContent = "✏️";
+          botaoEditar.classList.add("editar");
+
+          botaoEditar.onclick = () => {
+          localStorage.setItem("carroEdicao", JSON.stringify(item));
+          window.location.href = "cadastro_carros.html";
+};
+
+            card.appendChild(botaoEditar);
+    }
+        
+      });
+    } else {
+      container.innerHTML = '<p>Nenhum carro cadastrado encontrado.</p>';
+    }
+
+  } catch (erro) {
+    console.error('Erro:', erro);
+    document.getElementById('container-cards').innerHTML =
+      '<p>Erro ao carregar os dados da API.</p>';
+  }
+}
+
+
+window.addEventListener('DOMContentLoaded', carregarCards);
+
+
+</script>
+
+    
+<script>
+
+function verificarLogin() {
+  const usuarioJson = localStorage.getItem("usuario");
+
+  if (!usuarioJson) {
+    alert("Você precisa estar logado!");
+  
+    window.location.href = "login.html"; 
+    return null; 
+  }
+
+  return JSON.parse(usuarioJson); 
+}
+
+
+  const usuario = verificarLogin(); 
+
+  console.log(usuario)
+
+
+if (usuario.tipo !== "admin") {
+ 
+  const btnCadastro = document.getElementById("cadastro_carro");
+  if (btnCadastro) {
+      btnCadastro.style.display = "none";
+  }
+}
+
+const linkAuth = document.getElementById('link-auth');
+const textoAuth = document.getElementById('texto-auth');
+const usuarioLogado = localStorage.getItem('usuario'); 
+
+function logout() {
+    localStorage.removeItem('usuario');
+    window.location.href = "/Home.html"; 
+}
+
+if (usuarioLogado) {
+    
+    textoAuth.textContent = "Logout";
+    
+    linkAuth.href = "#"; 
+    linkAuth.onclick = logout;
+    
+} else {
+    
+    textoAuth.textContent = "Login";
+    
+    linkAuth.href = "/login.html";
+    
+    linkAuth.onclick = null; 
+}
+
+const idEditar = localStorage.getItem("id_editar");
+
+if (idEditar) {
+    carregarDadosCarro(idEditar);
+}
+
+async function carregarDadosCarro(id) {
+    const resposta = await fetch(`http://localhost:3004/carros/listar/${id}`);
+    const carro = await resposta.json();
+
+    document.getElementById("marca").value = carro.marca;
+    document.getElementById("modelo").value = carro.modelo;
+    document.getElementById("ano").value = carro.ano;
+    document.getElementById("preco").value = carro.preco;
+    document.getElementById("km").value = carro.km;
+
+    document.getElementById("cadastro_carro").textContent = "Atualizar";
+}
+
+async function salvarCarro() {
+    const idEditar = localStorage.getItem("id_editar");
+
+    const carro = {
+        marca: document.getElementById("marca").value,
+        modelo: document.getElementById("modelo").value,
+        ano: document.getElementById("ano").value,
+        preco: document.getElementById("preco").value,
+        km: document.getElementById("km").value
+    };
+
+    if (!idEditar) {
+        
+        await fetch("http://localhost:3004/carros/cadastrar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(carro)
+        });
+    } else {
+        
+        await fetch(`http://localhost:3004/carros/editar/${idEditar}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(carro)
+        });
+
+        localStorage.removeItem("id_editar");
+    }
+
+    alert("Carro salvo com sucesso!");
+    window.location.href = "carros.html";
+}
+
+
+
+</script>
+
+<script src="script.js"></script>
+    
+</html>

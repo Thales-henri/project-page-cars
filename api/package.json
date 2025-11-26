@@ -1,0 +1,11 @@
+{
+  "name": "project-page-cars",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@fastify/cors": "^11.1.0",
+    "fastify": "^5.6.1",
+    "fastify-multer": "^2.0.3",
+    "multer": "^2.0.2"
+  }
+}

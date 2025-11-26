@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-Br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+  <section class="cadastro">
+    <div class="login">
+      <h1>cadastro</h1>
+      <div>
+        <input type="text" id="name" placeholder="Seu nome">
+      </div>
+      <div>
+        <input type="text" id="last_name" placeholder="Sobrenome">
+      </div>
+      <div>
+        <input type="text" id="number"  placeholder="Digite seu numero" >
+      </div>
+      <div>
+        <input type="text" id="cpf" placeholder="Digite seu CPF">
+      </div>
+      <div class="email">
+        <input type="email" id="caixa_email" placeholder="E-mail">
+      </div>
+      <div class="senha">
+        <input type="password" minlength="8" id="caixa_senha" placeholder="senha">
+        <input type="password" minlength="8" id="confirm_senha" placeholder="Digite sua senha novamente">
+        <div class="botao">
+          <button id="toggle-password">👁️</button>
+        </div>
+      </div>
+      <div>
+      <button class="Cadastrar" onclick="Cadastro()">CADASTRE-SE</button>
+      <button class="Cadastrar" onclick="voltar()">VOLTAR</button>
+      </div>
+    </div>
+  </section>
+
+</body>
+<script src="script.js"></script>
+
+</html>
