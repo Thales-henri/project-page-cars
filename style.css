@@ -145,3 +145,48 @@ h1 {
   background-color: #007bff;
   color: white;
 }
+
+
+#cars{
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  border-radius: 10px;}
+
+/* Estilos para textarea e upload de múltiplas imagens */
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    resize: vertical;
+    min-height: 80px;
+    box-sizing: border-box;
+}
+
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+    background: #f9f9f9;
+}
+
+input[type="file"]:hover {
+    border-color: #007bff;
+    background: #f0f8ff;
+}
+
+small {
+    color: #666;
+    font-size: 12px;
+    display: block;
+    margin-top: 5px;
+    text-align: left;
+}

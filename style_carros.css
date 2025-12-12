@@ -1,19 +1,19 @@
 
 body {
-   margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-     background-color: rgb(255, 255, 255);
-     font: normal 15pt Arial;
-     text-align: center;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #ffffff;
+    font: normal 15pt Arial;
+    text-align: center;
       overflow-x: hidden;
 }
 
 body, html {
  
   font-family: 'Poppins', sans-serif;
-  background-color: #fff;
+  background-color: #ffffff;
   text-align: center;
   font-size: 24px;
 }
@@ -141,27 +141,13 @@ nav a:hover::after {
   background-color: #000000;
   color: #fff;
   border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
+  border-radius: 10px;
+  padding: 10px 20px;
   margin-bottom: 15px;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
-}
-
-.reverva:hover {
-  background-color: #007bff;
-}
-.reserva {
-  background-color: #000;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.3s ease;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .reserva:hover {
@@ -170,7 +156,8 @@ nav a:hover::after {
 
 .carros {
   background-color: #fff;
-  width: 250px;
+  width: 350px;
+  height: 500px;
   padding: 20px;
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -180,19 +167,11 @@ nav a:hover::after {
 }
 
 #cadastro_carro{
- background-color: #000;
+  background-color: #000;
   color: #fff;
   border: none;
   padding: 10px 20px;
   border-radius: 10px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.3s ease;
-   background-color: #000000;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
   margin-bottom: 15px;
   font-weight: 500;
   cursor: pointer;
@@ -209,27 +188,13 @@ nav a:hover::after {
   background-color: #000000;
   color: #fff;
   border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
+  border-radius: 10px;
+  padding: 10px 20px;
   margin-bottom: 15px;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.3s ease;
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
-}
-
-.deletar:hover {
-  background-color: #007bff;
-}
-.deletar {
-  background-color: #000;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.3s ease;
 }
 
 .deletar:hover {
@@ -258,26 +223,40 @@ nav a:hover::after {
   display: block;
 }
 
-.file-label {
-  display: inline-block;
-  padding: 10px 18px;
-  background-color: #4a90e2;
-  color: white;
-  font-size: 15px;
-  font-weight: 600;
+
+#image{
+  background: #4a90e2;
+  color: #fff;
+  padding: 10px 16px;
+  border: none;
   border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.25);
 }
 
-.file-label:hover {
-  background-color: #3c7ac2;
+.imagemCarro:hover {
+  background: #357abd;
+  box-shadow: 0 6px 16px rgba(53, 122, 189, 0.3);
+  transform: scale(1.08);
 }
 
-.file-label:active {
-  transform: scale(0.97);
+.vermais{
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  background-color: #000000;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin-bottom: 15px;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  margin-block-start: 50px;
 }
 
-.file-input {
-  display: none; /* Esconde o input feio */
+.vermais:hover {
+  background-color: #333;
 }

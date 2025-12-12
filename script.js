@@ -13,21 +13,21 @@ function mostrar_senha() {
 document.getElementById("toggle-password").addEventListener("click", mostrar_senha)
 
 async function Enter() {
-   const email = document.getElementById('caixa_email').value
-   const senha = document.getElementById('caixa_senha').value
+    const email = document.getElementById('caixa_email').value
+    const senha = document.getElementById('caixa_senha').value
 
-   const dados  = (email, senha)
+    const dados  = (email, senha)
 
-   const resposta = await fetch("http://localhost:3004/usuarios/login", {
+    const resposta = await fetch("http://localhost:3004/usuarios/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, senha })}
-   )
+    )
   const data = await resposta.json();
 
   if (resposta.ok) {
     localStorage.setItem("usuario", JSON.stringify(data.usuario));
-console.log(data.usuario)
+    console.log(data.usuario)
     alert("Login realizado!");
     window.location.href = "carros.html";
   } else {
@@ -59,8 +59,27 @@ async function Cadastro() {
   if (senha !== confirm_senha) {
     alert("As senhas não coincidem!");
     return;
+    } 
+  if (senha.length < 6) {
+      alert("A senha deve ter pelo menos 6 caracteres.");
+      return;
   }
 
+  if (!email.includes("@")) {
+    alert("Por favor, insira um email válido.");
+    return;
+  }
+
+  if (cpf.length !== 11) {
+    alert("Por favor, insira um CPF válido com 11 dígitos.");
+    return;
+  }
+
+  if (numero.length < 10 || isNaN(numero)) {
+    alert("Por favor, insira um número de telefone válido.");
+    return;
+  }
+  
   const dados = {
     nome,
     sobrenome,

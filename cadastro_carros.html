@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
     <title>cadastrar carro</title>
@@ -28,10 +28,14 @@
         <input type="text" id="km" placeholder="Digite a quantidade de km rodado">
       </div>
       <div>
-        <input type="file" id="image" accept="image/*" class="file-input" enctype="multipart/form-data">
+        <textarea id="descricao" placeholder="Descrição do veículo (opcional)" rows="4"></textarea>
+      </div>
+      <div>
+        <input type="file" id="images" accept="image/*" multiple enctype="multipart/form-data">
+        <small>Selecione múltiplas imagens (máximo 10)</small>
       </div>
       <div class="buttons">
-      <button  class="Cadastrar" onclick="cadastro()">CADASTRAR</button>
+      <button  class="Cadastrar" id="botaoAcao" onclick="cadastro()">CADASTRAR</button>
       <button class="Cadastrar" onclick="voltar()">VOLTAR</button>
       </div>
     </div>
@@ -50,6 +54,7 @@
     ano: document.getElementById("ano").value,
     preco: document.getElementById("preco").value,
     km: document.getElementById("km").value,
+    descricao: document.getElementById("descricao").value,
   };
 
   const resposta = await fetch("http://localhost:3004/carros/cadastrar", {
@@ -69,20 +74,23 @@
   const carroId = data.id;
   console.log("ID DO CARRO CRIADO:", carroId);
 
+  const imagens = document.getElementById("images").files;
 
-  const imagem = document.getElementById("image").files[0];
-
-  if (!imagem) {
+  if (imagens.length === 0) {
     alert("Carro cadastrado, mas nenhuma imagem selecionada.");
-    window.location.href = "/carros.html";
+    setTimeout(() => {
+      window.location.href = "carros.html";
+    }, 200);
     return;
   }
 
   const formData = new FormData();
-  formData.append("imagem", imagem);
+  for (let i = 0; i < imagens.length; i++) {
+    formData.append("imagens", imagens[i]);
+  }
 
   const respostaUpload = await fetch(
-    `http://localhost:3004/carros/uploadcarro/${carroId}`,
+    `http://localhost:3004/carros/upload-multiplas/${carroId}`,
     { method: "POST", body: formData }
   );
 
@@ -90,16 +98,84 @@
   console.log("RESPOSTA:", dataUpload);
 
   if (respostaUpload.ok) {
-    alert("Carro e imagem cadastrados com sucesso!");
-    window.location.href = "carros.html";
-    
+    alert(`Carro e ${dataUpload.quantidade} imagens cadastrados com sucesso!`);
+    setTimeout(() => {
+      window.location.href = "carros.html";
+    }, 200);
   } else {
-    alert("Erro no upload da imagem: " + (dataUpload.erro || "Tente novamente."));
+    alert("Erro no upload das imagens: " + (dataUpload.erro || "Tente novamente."));
   }
 }
 
+
+async function carregarDadosCarro() {
+    const dados = localStorage.getItem("carroEdicao");
+    if (!dados) return;
+
+    const carro = JSON.parse(dados);
+
+    document.getElementById("marca").value = carro.marca;
+    document.getElementById("modelo").value = carro.modelo;
+    document.getElementById("ano").value = carro.ano;
+    document.getElementById("preco").value = carro.preco;
+    document.getElementById("km").value = carro.km;
+    document.getElementById("descricao").value = carro.descricao || "";
+
+    document.getElementById("botaoAcao").textContent = "Atualizar";
+    document.getElementById("botaoAcao").setAttribute("onclick", "salvarCarro()");
+}
+
+
+async function salvarCarro() {
+    const carroEdicao = localStorage.getItem("carroEdicao");
+
+    const carro = {
+        marca: document.getElementById("marca").value,
+        modelo: document.getElementById("modelo").value,
+        ano: document.getElementById("ano").value,
+        preco: document.getElementById("preco").value,
+        km: document.getElementById("km").value,
+        descricao: document.getElementById("descricao").value
+    };
+
+    if (!carroEdicao) {
+        await fetch("http://localhost:3004/carros/cadastrar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(carro)
+        });
+    } else {
+        const carroObj = JSON.parse(carroEdicao);
+
+        await fetch(`http://localhost:3004/carros/editar/${carroObj.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(carro)
+        });
+
+        const imagens = document.getElementById("images").files;
+        if (imagens.length > 0) {
+            const formData = new FormData();
+            for (let i = 0; i < imagens.length; i++) {
+                formData.append("imagens", imagens[i]);
+            }
+
+            await fetch(`http://localhost:3004/carros/upload-multiplas/${carroObj.id}`, {
+                method: "POST",
+                body: formData
+            });
+        }
+
+        localStorage.removeItem("carroEdicao");
+    }
+
+    alert("Carro salvo com sucesso!");
+    window.location.href = "carros.html";
+}
+
+
+document.addEventListener("DOMContentLoaded", carregarDadosCarro);
+
     
 </script>
-
-<script src=./api/src/auth.js></script>
 </html>

@@ -14,6 +14,7 @@ import carrosRoutes_editar from "./routes/editarcarros.js";
 import carrosRoutes_cadastrar from "./routes/cadastrarcarros.js";
 import carrosRoutes_deletar from "./routes/deletarcarros.js";
 import carrosRoutes_upload from "./routes/uploadcarro.js";
+import uploadMultiplasImagens from "./routes/uploadMultiplasImagens.js";
 
 import usuariosRoutes_cadastrar from "./routes/cadastrarusuarios.js";
 import usuariosRoutes_reservar from "./routes/reservarcarro.js";
@@ -49,6 +50,7 @@ app.register(carrosRoutes_editar, { prefix: "/carros" });
 app.register(carrosRoutes_cadastrar, { prefix: "/carros" });
 app.register(carrosRoutes_deletar, { prefix: "/carros" });
 app.register(carrosRoutes_upload, {prefix: "/carros"});
+app.register(uploadMultiplasImagens, {prefix: "/carros"});
 
 
 

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carro</title>
+    <link rel="stylesheet" href="style_carro.css">
+</head>
+<body>
+    
+<header>
+    <img id="img" src="/img/Digitalmarketcars.png">
+    <nav>
+      <ul>
+        <a href="/Home.html"><li>Home</li></a>
+        <a href="/carros.html"><li>Carros</li></a>
+        <a href="/login.html"  id="link-auth"><li id="texto-auth">login</li></a>
+      </ul>
+    </nav>
+  </header>
+
+    <main class="container-detalhes">
+        <section class="galeria-section">
+            <div class="imagem-principal">
+                <img id="imagem-destaque" src="" alt="Imagem do carro">
+            </div>
+            <div class="miniaturas" id="miniaturas-container">
+              
+            </div>
+        </section>
+
+        <section class="info-section">
+            <div class="info-header">
+                <h1 id="titulo-carro"></h1>
+                <p class="preco" id="preco-carro"></p>
+            </div>
+
+            <div class="info-destaque">
+                <div class="info-item">
+                   
+                    <div>
+                        <p class="label">Ano</p>
+                        <p class="valor" id="ano-carro"></p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    
+                    <div>
+                        <p class="label">Quilometragem</p>
+                        <p class="valor" id="km-carro"></p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    
+                    <div>
+                        <p class="label">Marca</p>
+                        <p class="valor" id="marca-carro"></p>
+                    </div>
+                </div>
+                <div class="info-item">
+                  
+                    <div>
+                        <p class="label">Modelo</p>
+                        <p class="valor" id="modelo-carro"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="descricao-section">
+                <h2>Descrição</h2>
+                <p id="descricao-carro">Veículo em excelente estado de conservação, revisões em dia, pronto para uso.</p>
+            </div>
+
+            <div class="acoes">
+                <button class="btn-reservar" id="btn-reservar">Reservar Veículo</button>
+                <button class="btn-contato">Entrar em Contato</button>
+            </div>
+
+            <div class="status-reserva" id="status-reserva" style="display: none;">
+                <p>✅ <strong>Reservado por:</strong> <span id="nome-reserva"></span></p>
+            </div>
+        </section>
+    </main>
+</body>
+  <script src="carro.js"></script>
+
+</html>

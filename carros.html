@@ -21,14 +21,17 @@
   </header>
 
   <main class="conteudo">
-    <a href="cadastro_carros.html">
-      <button id="cadastro_carro">Cadastrar carro</button>
-    </a>
+    
+      <button id="cadastro_carro"  onclick="irParaCadastro()" >Cadastrar carro</button>
 
     <div id="container-cards" class="carro"></div>
   </main>
 
   <script>
+
+    function irParaCadastro() {
+    window.location.href = "cadastro_carros.html";
+}
 
     async function reservar(id_carro) {
       const id_usuario = JSON.parse(localStorage.getItem("usuario"));
@@ -44,8 +47,8 @@
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(reserva)
   });
-  const nome = localStorage.getItem("nome")
   localStorage.setItem("nome", usuario.nome);
+  const nome = localStorage.getItem("nome")
   const data = await response.json();
   alert(`${data.mensagem} - Reservado por: ${nome}`);
 }
@@ -62,31 +65,30 @@
         );
 
     
-        if (resposta.status === 204 || resposta.status === 200) {
-         
+        if (resposta.status == 204 || resposta.status == 200) {
+          
           await carregarCards();
           alert('Carro deletado com sucesso.');
           return;
         }
 
-     
+      
         const dados = await resposta.json().catch(() => null);
 
-        if (!resposta.ok) {
-          const msg = (dados && dados.message) ? dados.message : 'Erro ao deletar o carro.';
-          alert(msg);
-          return;
+        if (!dados || !dados.message) {
+          alert('Erro ao deletar o carro.');
+          return; 
+        } else {
+          alert(dados.message);
+          await carregarCards(); 
         }
-
-        alert(dados && dados.message ? dados.message : 'Carro deletado com sucesso.');
-        await carregarCards();
 
       } catch (erro) {
         console.error('Erro ao deletar:', erro);
         alert('Erro ao deletar o carro. Veja o console para mais detalhes.');
       }
     }
-     const api = 'http://localhost:3004/carros/listar';
+      const api = 'http://localhost:3004/carros/listar';
 
 async function carregarCards() {
   try {
@@ -109,14 +111,23 @@ async function carregarCards() {
           const urlimagem = `http://localhost:3004/image//${item.imagem}`
           const img = document.createElement("img");
           img.src = urlimagem
-          img.classList.add('imagemCarro')
-          card.appendChild(img);
+          const link = document.createElement("a");
+          link.href = `carro.html?id=${item.id}`
+          img.classList.add('imagemCarro');
+          link.appendChild(img);
+          card.appendChild(link);
         
                 
         
         const titulo = document.createElement('h2');
         titulo.textContent = item.marca;
         card.appendChild(titulo);
+
+          if (item.nome_reserva) {
+            const nomeDaReserva = document.createElement("p");
+            nomeDaReserva.textContent = `Reservado por: ${item.nome_reserva}`;
+            card.appendChild(nomeDaReserva);
+}
 
         
         const modelo = document.createElement('p');
@@ -131,8 +142,6 @@ async function carregarCards() {
         button.onclick = () => {reservar(item.id)};
         card.appendChild(button)
         
-        
-
         const preco = document.createElement('p')
         preco.textContent = `preço: ${item.preco}`
         card.appendChild(preco);
@@ -143,7 +152,7 @@ async function carregarCards() {
 
         
         const km = document.createElement('p')
-        const kmTexto = (item.km === 0 || item.km === '0') ? 'novo' : (item.km ?? '-');
+        const kmTexto = (item.km == 0 || item.km == '0') ? 'novo' : (item.km ?? '-');
         km.textContent = `km: ${kmTexto}`;
         card.appendChild(km);
         
@@ -177,7 +186,9 @@ async function carregarCards() {
       '<p>Erro ao carregar os dados da API.</p>';
   }
 }
-
+if (!document.referrer.includes("carros.html")) {
+  localStorage.removeItem("carroEdicao");
+}
 
 window.addEventListener('DOMContentLoaded', carregarCards);
 
@@ -220,6 +231,7 @@ const usuarioLogado = localStorage.getItem('usuario');
 
 function logout() {
     localStorage.removeItem('usuario');
+    localStorage.clear()
     window.location.href = "/Home.html"; 
 }
 
@@ -239,62 +251,9 @@ if (usuarioLogado) {
     linkAuth.onclick = null; 
 }
 
-const idEditar = localStorage.getItem("id_editar");
-
-if (idEditar) {
-    carregarDadosCarro(idEditar);
-}
-
-async function carregarDadosCarro(id) {
-    const resposta = await fetch(`http://localhost:3004/carros/listar/${id}`);
-    const carro = await resposta.json();
-
-    document.getElementById("marca").value = carro.marca;
-    document.getElementById("modelo").value = carro.modelo;
-    document.getElementById("ano").value = carro.ano;
-    document.getElementById("preco").value = carro.preco;
-    document.getElementById("km").value = carro.km;
-
-    document.getElementById("cadastro_carro").textContent = "Atualizar";
-}
-
-async function salvarCarro() {
-    const idEditar = localStorage.getItem("id_editar");
-
-    const carro = {
-        marca: document.getElementById("marca").value,
-        modelo: document.getElementById("modelo").value,
-        ano: document.getElementById("ano").value,
-        preco: document.getElementById("preco").value,
-        km: document.getElementById("km").value
-    };
-
-    if (!idEditar) {
-        
-        await fetch("http://localhost:3004/carros/cadastrar", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(carro)
-        });
-    } else {
-        
-        await fetch(`http://localhost:3004/carros/editar/${idEditar}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(carro)
-        });
-
-        localStorage.removeItem("id_editar");
-    }
-
-    alert("Carro salvo com sucesso!");
-    window.location.href = "carros.html";
-}
-
-
 
 </script>
 
-<script src="script.js"></script>
+
     
 </html>
