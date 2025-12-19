@@ -156,12 +156,12 @@ Deploy completo (API + Frontend)
 
 📷 Screenshots (Opcional)
 
-Substitua pelos seus prints quando quiser:
-imagens
+
+imagens:
 
 
  Home
-   <img width="1897" height="143" alt="image" src="https://github.com/user-attachments/assets/c2aad703-b273-41a4-8b78-1fdceb86b413" />
+     <img width="1900" height="866" alt="image" src="https://github.com/user-attachments/assets/73ae3007-f2f8-4e4e-ad3e-1d2efb07d5fb" />
  Carros  
    <img width="1896" height="864" alt="image" src="https://github.com/user-attachments/assets/b0a5bb2c-b3c9-4486-b006-9348d7c24001" />
  Login
